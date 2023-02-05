@@ -1,5 +1,7 @@
 ﻿using Application.Interfaces;
+using Application.Requests;
 using Confluent.Kafka;
+using Newtonsoft.Json;
 
 namespace Application.Kafka;
 
@@ -22,7 +24,15 @@ public class KafkaConsumer : IKafkaConsumer
                 try
                 {
                     var message = consumer.Consume();
-                    Console.WriteLine($"Received message: {message.Value}");
+
+                    if (!string.IsNullOrEmpty(message.Message.Value))
+                    {
+                        var deserializedMessage = JsonConvert.DeserializeObject<AddToCartRequest>(message.Message.Value);
+
+
+                    }
+
+
                 }
                 catch (ConsumeException e)
                 {

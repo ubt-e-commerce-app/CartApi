@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
+using Application.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,11 @@ public class CartService : ICartService
             CustomerId = cart.CustomerId,
             CartItems = cartItems.Select(x => new CartItemsDto { Price = x.Price, ProductId = x.ProductId }).ToList()
         };
+    }
+
+    public async Task AddToCart(AddToCartRequest request)
+    {
+        
     }
 
 }
