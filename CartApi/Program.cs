@@ -1,5 +1,6 @@
 
 using Application;
+using Application.BackgroundJobs;
 using Infrastructure.Database;
 
 namespace CartApi
@@ -14,12 +15,18 @@ namespace CartApi
             builder.Services.AddDatabaseInfrastructureLayer(builder.Configuration);
             builder.Services.AddApplicationLayer(builder.Configuration);
 
+            builder.Services.AddHostedService<KafkaBackgroundJob>();
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+         
+
             var app = builder.Build();
+
+            
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

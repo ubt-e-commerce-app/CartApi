@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Application.BackgroundJobs;
+using Application.Interfaces;
+using Application.Kafka;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 
@@ -14,7 +17,11 @@ public static class ApplicationRegistrationExtensions
         // Register the current project's dependencies
         services.Scan(scanner => scanner.FromAssemblies(typeof(ApplicationRegistrationExtensions).Assembly)
             .AddClasses(c => c.Where(type => !type.IsNested), publicOnly: false)
-            .AsSelfWithInterfaces().WithScopedLifetime());
+            .AsSelfWithInterfaces().WithSingletonLifetime());
+
+
+        services.AddSingleton<IKafkaConsumer, KafkaConsumer>();
+        services.AddSingleton<KafkaBackgroundJob>();
 
         return services;
     }
