@@ -1,4 +1,5 @@
-﻿using CartApi;
+﻿using Domain.Entites;
+using Infrastructure.Database.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

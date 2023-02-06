@@ -1,15 +1,16 @@
 ﻿using Application.Interfaces;
+using Application.Kafka;
 using Microsoft.Extensions.Hosting;
 
 namespace Application.BackgroundJobs;
 
-public class KafkaBackgroundJob : IHostedService
+public class KafkaRemoveFromCartBackgroundJob : IHostedService
 {
-    private readonly IKafkaConsumer _kafkaConsumer;
+    private readonly IKafkaRemoveFromCartConsumer _kafkaRemoveFromCartConsumer;
 
-    public KafkaBackgroundJob(IKafkaConsumer kafkaConsumer)
+    public KafkaRemoveFromCartBackgroundJob(IKafkaRemoveFromCartConsumer kafkaRemoveFromCartConsumer)
     {
-        _kafkaConsumer = kafkaConsumer;
+        _kafkaRemoveFromCartConsumer = kafkaRemoveFromCartConsumer;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
@@ -18,7 +19,7 @@ public class KafkaBackgroundJob : IHostedService
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                _kafkaConsumer.Consume();
+                _kafkaRemoveFromCartConsumer.Consume();
             }
         });
 

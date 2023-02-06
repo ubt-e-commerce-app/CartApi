@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entites;
+using Microsoft.EntityFrameworkCore;
 
-namespace CartApi;
+namespace Infrastructure.Database.DbContexts;
 
 public partial class CartApiDbContext : DbContext
 {

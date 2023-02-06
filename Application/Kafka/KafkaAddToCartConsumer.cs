@@ -5,8 +5,15 @@ using Newtonsoft.Json;
 
 namespace Application.Kafka;
 
-public class KafkaConsumer : IKafkaConsumer
+public class KafkaAddToCartConsumer : IKafkaAddToCartConsumer
 {
+    private readonly ICartService _cartService;
+
+    public KafkaAddToCartConsumer(ICartService cartService)
+    {
+        _cartService = cartService;
+    }
+
     public void Consume()
     {
         var config = new ConsumerConfig
@@ -29,10 +36,9 @@ public class KafkaConsumer : IKafkaConsumer
                     {
                         var deserializedMessage = JsonConvert.DeserializeObject<AddToCartRequest>(message.Message.Value);
 
-
+                        if (deserializedMessage != null)
+                            _cartService.AddToCart(deserializedMessage);
                     }
-
-
                 }
                 catch (ConsumeException e)
                 {

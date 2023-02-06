@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
 using Application.Requests;
+using Domain.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,51 @@ public class CartService : ICartService
 
     public async Task AddToCart(AddToCartRequest request)
     {
-        
+        if (request.CustomerId != 0 && request.ProductId != 0 && request.ProductPrice > 0)
+        {
+            var currentCustomerCart = await _cartRepo.GetCustomerCartByCustomerId(request.CustomerId);
+
+            if (currentCustomerCart == null)
+            {
+                var newCart = new Cart
+                {
+                    CustomerId = request.CustomerId,
+                    CreateDateTime = DateTime.Now
+                };
+
+                var created = await _cartRepo.CreateCart(newCart);
+
+                if (created)
+                    currentCustomerCart = await _cartRepo.GetCustomerCartByCustomerId(request.CustomerId);
+            }
+
+            var cartItem = new CartItem
+            {
+                CartId = currentCustomerCart.Id,
+                ProductId = request.ProductId,
+                Price = request.ProductPrice,
+                CreateDateTime = DateTime.Now
+            };
+
+            await _cartItemsRepo.InsertCartItems(new List<CartItem> { cartItem });
+        }
     }
 
+    public async Task RemoveFromCart(RemoveFromCartRequest request)
+    {
+        if (request.CustomerId != 0 && request.ProductId != 0)
+        {
+            var custmerCart = await _cartRepo.GetCustomerCartByCustomerId(request.CustomerId);
+
+            if (custmerCart != null)
+            {
+                var cartId = custmerCart.Id;
+
+                var cartItemDoBeRemoved = await _cartItemsRepo.GetCartItemByCartIdAndProductId(cartId, request.ProductId);
+
+                if (cartItemDoBeRemoved != null)
+                    await _cartItemsRepo.RemoveCartItem(cartItemDoBeRemoved);                        
+            }
+        }
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
-using CartApi;
+using Domain.Entites;
+using Infrastructure.Database.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database.Repositories;
@@ -25,6 +26,18 @@ public class CartItemsRepo : ICartItemsRepo
         }
     }
 
+    public async Task<CartItem?> GetCartItemByCartIdAndProductId(int cartId, int productId)
+    {
+        try
+        {
+            return await _cartApiDbContext.CartItems.Where(x => x.CartId == cartId && x.ProductId == productId).FirstOrDefaultAsync();
+        }
+        catch (Exception)
+        {
+            return new CartItem();
+        }
+    }
+
     public async Task<bool> InsertCartItems(List<CartItem> carItems)
     {
         try
@@ -34,6 +47,20 @@ public class CartItemsRepo : ICartItemsRepo
             return await _cartApiDbContext.SaveChangesAsync() > 0;
         }
         catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> RemoveCartItem(CartItem carItem)
+    {
+        try
+        {
+            _cartApiDbContext.CartItems.Remove(carItem);
+
+            return await _cartApiDbContext.SaveChangesAsync() > 0;
+        }
+        catch (Exception ex)
         {
             return false;
         }

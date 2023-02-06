@@ -20,8 +20,8 @@ public static class ApplicationRegistrationExtensions
             .AsSelfWithInterfaces().WithSingletonLifetime());
 
 
-        services.AddSingleton<IKafkaConsumer, KafkaConsumer>();
-        services.AddSingleton<KafkaBackgroundJob>();
+        services.AddSingleton<IKafkaAddToCartConsumer, KafkaAddToCartConsumer>();
+        services.AddSingleton<KafkaAddToCartBackgroundJob>();
 
         return services;
     }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace CartApi;
+﻿namespace Domain.Entites;
 
 public partial class Cart
 {

@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
-using CartApi;
+using Domain.Entites;
+using Infrastructure.Database.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Database.Repositories;
@@ -25,7 +26,7 @@ public class CartRepo : ICartRepo
         }
     }
 
-    public async Task<bool> InsertOrder(Cart cart)
+    public async Task<bool> CreateCart(Cart cart)
     {
         try
         {
