@@ -66,7 +66,7 @@ public class CartService : ICartService
 
             var cartItem = new CartItem
             {
-                CartId = currentCustomerCart.Id,
+                CartId = currentCustomerCart!.Id,
                 ProductId = request.ProductId,
                 Price = request.ProductPrice,
                 CreateDateTime = DateTime.Now
